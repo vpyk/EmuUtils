@@ -27,7 +27,7 @@
 #include <vector>
 #include <string>
 
-#define VERSION "1.01"
+#define VERSION "1.02"
 
 
 static const uint8_t casSignature[8] = {0x1F, 0xA6, 0xDE, 0xBA, 0xCC, 0x13, 0x7D, 0x74};
@@ -39,6 +39,7 @@ enum TapeFileFormat {
     TFF_RKP,
     TFF_RKM,
     TFF_RKU,
+    TFF_RK4,
     TFF_RKS,
     TFF_RKO,
     TFF_BRU,
@@ -47,7 +48,7 @@ enum TapeFileFormat {
 };
 
 
-const char* txtFormats[] = {"RK compatible", "RKP (RK compatible)", "RKM", "RKU", "RKS", "RKO", "BRU", "CAS", "LVT"};
+const char* txtFormats[] = {"RK compatible", "RKP (RK compatible)", "RKM", "RKU", "RK4", "RKS", "RKO", "BRU", "CAS", "LVT"};
 
 
 #pragma pack(push, 1)
@@ -74,6 +75,16 @@ struct RkpFooter {
     uint8_t syncByte;
     uint8_t csHi;
     uint8_t csLo;
+};
+
+
+struct Rk4Footer {
+    uint8_t nullBytes[16];
+    uint8_t syncByte;
+    uint8_t csHi1;
+    uint8_t csLo1;
+    uint8_t csHi2;
+    uint8_t csLo2;
 };
 
 
@@ -171,6 +182,7 @@ union FileHeader {
 union FileFooter {
     RkFooter rkFooter;
     RkpFooter rkpFooter;
+    Rk4Footer rk4Footer;
     RkmFooter rkmFooter;
     RksFooter rksFooter;
     RkoFooter rkoFooter;

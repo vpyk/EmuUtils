@@ -45,6 +45,7 @@ void usage(string& moduleName)
             "      rkm (Mikrosha)" << endl <<
             "      rk8 (Mikro-80)" << endl <<
             "      rku (UT-88)" << endl <<
+            "      rk4 (Electronika KR-04)" << endl <<
             "      rke (Eureka)" << endl <<
             "      rks (Specialist w/o name)" << endl <<
             "      rko (Orion, tape)" << endl <<
@@ -183,6 +184,7 @@ bool convert(vector<uint8_t> body, TapeFileFormat format, uint16_t loadAddr, uin
     case TFF_RKP:
     case TFF_RKM:
     case TFF_RKU:
+    case TFF_RK4:
         headerSize = sizeof(RkHeader);
         header.rkHeader.loadAddrHi = loadAddr >> 8;
         header.rkHeader.loadAddrLo = loadAddr & 0xFF;
@@ -213,6 +215,14 @@ bool convert(vector<uint8_t> body, TapeFileFormat format, uint16_t loadAddr, uin
             footer.rkpFooter.syncByte = 0xE6;
             footer.rkpFooter.csHi = cs >> 8;
             footer.rkpFooter.csLo = cs & 0xFF;
+        } else if (format == TFF_RK4) {
+            footerSize = sizeof(Rk4Footer);
+            memset(footer.rk4Footer.nullBytes, 0, sizeof(footer.rk4Footer.nullBytes));
+            footer.rk4Footer.syncByte = 0xE6;
+            footer.rk4Footer.csHi1= cs >> 8;
+            footer.rk4Footer.csLo1 = cs & 0xFF;
+            footer.rk4Footer.csHi2= cs >> 8;
+            footer.rk4Footer.csLo2 = cs & 0xFF;
         } else if (format == TFF_RKM) {
             footerSize = sizeof(RkmFooter);
             footer.rkmFooter.csHi = cs >> 8;
@@ -378,6 +388,8 @@ int main(int argc, const char** argv)
                 format = TFF_BRU;
             else if (value == "rkp")
                 format = TFF_RKP;
+            else if (value == "rk4")
+                format = TFF_RK4;
             else if (value == "cas")
                 format = TFF_CAS;
             else if (value == "lvt")
