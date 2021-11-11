@@ -1,6 +1,6 @@
 /*
  *  bin2tape v. 1.0
- *  © Viktor Pykhonin <pyk@mail.ru>, 2021
+ *  ï¿½ Viktor Pykhonin <pyk@mail.ru>, 2021
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -153,6 +153,15 @@ uint16_t calcRkmCs(vector<uint8_t>& data)
 }
 
 
+uint16_t calcRkuCs(vector<uint8_t>& data)
+{
+    uint16_t cs = 0;
+    for (uint16_t i = 0; i < data.size(); i++)
+        cs += data.data()[i];
+    return cs;
+}
+
+
 bool convert(vector<uint8_t> body, TapeFileFormat format, uint16_t loadAddr, uint16_t startAddr, string& outputFile, const uint8_t* intFileName)
 {
     int endAddr = loadAddr + body.size() - 1;
@@ -173,15 +182,25 @@ bool convert(vector<uint8_t> body, TapeFileFormat format, uint16_t loadAddr, uin
     case TFF_RK:
     case TFF_RKP:
     case TFF_RKM:
+    case TFF_RKU:
         headerSize = sizeof(RkHeader);
         header.rkHeader.loadAddrHi = loadAddr >> 8;
         header.rkHeader.loadAddrLo = loadAddr & 0xFF;
         header.rkHeader.endAddrHi = endAddr >> 8;
         header.rkHeader.endAddrLo = endAddr & 0xFF;
 
-        cs = format != TFF_RKM ? calcRkCs(body) : calcRkmCs(body);
+        switch (format) {
+        case TFF_RKM:
+            cs = calcRkmCs(body);
+            break;
+        case TFF_RKU:
+            cs = calcRkuCs(body);
+            break;
+        default:
+            cs = calcRkCs(body);
+        }
 
-        if (format == TFF_RK) {
+        if (format == TFF_RK || format == TFF_RKU) {
             footerSize = sizeof(RkFooter);
             footer.rkFooter.nullByte1 = 0;
             footer.rkFooter.nullByte2 = 0;
@@ -345,10 +364,12 @@ int main(int argc, const char** argv)
             value = argv[i];
             ext = value;
 
-            if (value == "rk" || value == "rkr" || value == "rka" || value == "rk8" || value == "rku" || value == "rke")
+            if (value == "rk" || value == "rkr" || value == "rka" || value == "rk8" || value == "rke")
                 format = TFF_RK;
             else if (value == "rkm")
                 format = TFF_RKM;
+            else if (value == "rku")
+                format = TFF_RKU;
             else if (value == "rks")
                 format = TFF_RKS;
             else if (value == "rko")

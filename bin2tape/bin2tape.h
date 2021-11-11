@@ -1,6 +1,6 @@
 /*
  *  bin2tape v. 1.0
- *  © Viktor Pykhonin <pyk@mail.ru>, 2021
+ *  ï¿½ Viktor Pykhonin <pyk@mail.ru>, 2021
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
 #include <vector>
 #include <string>
 
-#define VERSION "1.0"
+#define VERSION "1.01"
 
 
 static const uint8_t casSignature[8] = {0x1F, 0xA6, 0xDE, 0xBA, 0xCC, 0x13, 0x7D, 0x74};
@@ -38,6 +38,7 @@ enum TapeFileFormat {
     TFF_RK,
     TFF_RKP,
     TFF_RKM,
+    TFF_RKU,
     TFF_RKS,
     TFF_RKO,
     TFF_BRU,
@@ -46,7 +47,7 @@ enum TapeFileFormat {
 };
 
 
-const char* txtFormats[] = {"RK compatible", "RKP (RK compatible)", "RKM", "RKS", "RKO", "BRU", "CAS", "LVT"};
+const char* txtFormats[] = {"RK compatible", "RKP (RK compatible)", "RKM", "RKU", "RKS", "RKO", "BRU", "CAS", "LVT"};
 
 
 #pragma pack(push, 1)
