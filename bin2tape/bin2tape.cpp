@@ -1,6 +1,6 @@
 /*
  *  bin2tape v. 1.0
- *  � Viktor Pykhonin <pyk@mail.ru>, 2021
+ *  (c) Viktor Pykhonin <pyk@mail.ru>, 2021-2023
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -46,6 +46,7 @@ void usage(string& moduleName)
             "      rk8 (Mikro-80)" << endl <<
             "      rku (UT-88)" << endl <<
             "      rk4 (Electronika KR-04)" << endl <<
+            "      rkl (Palmira)" << endl <<
             "      rke (Eureka)" << endl <<
             "      rks (Specialist w/o name)" << endl <<
             "      rko (Orion, tape)" << endl <<
@@ -335,7 +336,7 @@ int main(int argc, const char** argv)
 {
     static_assert(sizeof(RkFooter) == 5, "Packed structs required!");
 
-    cout << "bin2tape v. " VERSION " (c) Viktor Pykhonin, 2021" << endl << endl;
+    cout << "bin2tape v. " VERSION " (c) Viktor Pykhonin, 2021-2023" << endl << endl;
     string moduleName = argv[0];
     moduleName = moduleName.substr(moduleName.find_last_of("/\\:") + 1);
 
@@ -374,7 +375,7 @@ int main(int argc, const char** argv)
             value = argv[i];
             ext = value;
 
-            if (value == "rk" || value == "rkr" || value == "rka" || value == "rk8" || value == "rke")
+            if (value == "rk" || value == "rkr" || value == "rka" || value == "rk8" || value == "rke" || value == "rkl")
                 format = TFF_RK;
             else if (value == "rkm")
                 format = TFF_RKM;
