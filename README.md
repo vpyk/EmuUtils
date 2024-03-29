@@ -34,3 +34,14 @@ Rdi HFE tools. Набор из двух утилит *hfe2rdi* и *rdi2hfe* на
 
 ### Зависимости
 python >= 3.6
+
+## bsm2txt
+
+### Назначение
+Утилита служит для преобразования файлов Basic Micron в текстовые файлы. Результирующий файл имеет кодировку DOS (cp866). 
+
+### Скачать архив с последней версией
+* Сборка под Windows: [https://emu80.org/files/?id=83](https://emu80.org/files/?id=83)
+
+### Компиляция под linux etc. 
+    fpc -Sd bsm2txt.pas
